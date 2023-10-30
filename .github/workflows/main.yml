@@ -17,5 +17,3 @@ jobs:
      #do the same with another action (actions/setup-java@v3) that enable to set up jdk 17
       - name: Set up JDK 17
         uses: actions/setup-java@v2
-
-
