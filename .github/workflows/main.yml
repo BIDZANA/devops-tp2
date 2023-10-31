@@ -92,4 +92,4 @@ jobs:
           java-version: 17
 
       - name: SonarCloud Analysis
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2023 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./backend-api/pom.xml
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2023 -Dsonar.organization=java/fr/takima/training -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./backend-api/pom.xml
