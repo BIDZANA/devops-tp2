@@ -11,20 +11,33 @@ La première étape consiste à configurer GitHub Actions, un service en ligne q
 ```yaml
 name: CI devops 2023
 on:
+  #to begin, you want to launch this job in the main and develop
   push:
     branches:
-      - main
+      - master
   pull_request:
+    branches:
+      - master
 
 jobs:
   test-backend:
     runs-on: ubuntu-22.04
     steps:
+      #checkout your GitHub code using actions/checkout@v2.5.0
       - uses: actions/checkout@v2.5.0
+
+      #do the same with another action (actions/setup-java@v3) that enables to set up jdk 17
       - name: Set up JDK 17
-        # TODO: Action pour configurer JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+
+      #finally, build your app with the latest command
       - name: Build and test with Maven
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2023 -Dsonar.organization=devops-school -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/pom.xml
+        working-directory: "backend-api"
+        run: mvn clean verify
 ```
 
 Nous avons configuré GitHub Actions pour déclencher le pipeline lors de "push" sur la branche principale (main). Le travail "test-backend" exécute des étapes pour construire l'application, exécuter des tests et générer un rapport de qualité avec SonarCloud.
@@ -38,7 +51,7 @@ Pour la phase de déploiement, nous construisons des images Docker et les publio
 La qualité du code est vérifiée à l'aide de SonarCloud. Nous avons enregistré un compte gratuit sur SonarCloud et configuré notre pipeline GitHub Actions pour exécuter des analyses SonarCloud après les tests.
 
 ```yaml
-run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2023 -Dsonar.organization=devops-school -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./simple-api/pom.xml
+run: mvn -B verify sonar:sonar -Dsonar.projectKey=BIDZANA_devops-tp2 -Dsonar.organization=marvin92 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file ./backend-api/pom.xml
 ```
 
 Le rapport de qualité est disponible sur SonarCloud, permettant de détecter les problèmes potentiels dans le code.
